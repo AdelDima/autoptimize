@@ -918,15 +918,18 @@ class autoptimizeImages
      */
     public function imgopt_admin_menu()
     {
-        add_submenu_page(
-            null,
-            'autoptimize_imgopt',
-            'autoptimize_imgopt',
-            'manage_options',
-            'autoptimize_imgopt',
-            array( $this, 'imgopt_options_page' )
-        );
-        register_setting( 'autoptimize_imgopt_settings', 'autoptimize_imgopt_settings' );
+        // no acces if multisite and not network admin and no site config allowed.
+        if ( ! is_multisite() || is_network_admin() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
+            add_submenu_page(
+                null,
+                'autoptimize_imgopt',
+                'autoptimize_imgopt',
+                'manage_options',
+                'autoptimize_imgopt',
+                array( $this, 'imgopt_options_page' )
+            );
+            register_setting( 'autoptimize_imgopt_settings', 'autoptimize_imgopt_settings' );
+        }
     }
 
     public function add_imgopt_tab( $in )
