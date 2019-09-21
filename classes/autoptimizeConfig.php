@@ -659,10 +659,9 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
 
     public function addmenu()
     {
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
+        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
             $hook = add_submenu_page( 'settings.php',  __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_network_options', 'autoptimize', array( $this, 'show' ) );
-        }
-        if ( ! is_multisite() || 'on' === autoptimizeOption::get_option( 'autoptimize_enable_site_config' ) ) {
+        } else if ( ! is_multisite() || 'on' === autoptimizeOption::get_option( 'autoptimize_enable_site_config' ) ) {
             $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show' ) );
         } else {
             $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show_message' ) );
