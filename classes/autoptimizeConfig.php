@@ -61,8 +61,8 @@ class autoptimizeConfig
 
 	public function show_message() {
 		?>
-			<h1>Autoptimize enabled in network</h1>
-			<p>If you want to enable per site configutation for Autoptimize, please contact your network administrator.</p>
+			<h1><?php _e( 'Autoptimize enabled in network', 'autoptimize' ); ?></h1>
+			<p><?php _e( 'If you want to enable per site configutation for Autoptimize, please contact your network administrator.', 'autoptimize' ); ?></p>
 		<?php
 	}
 
