@@ -20,7 +20,7 @@ class autoptimizePartners
         if ( $this->enabled() ) {
             add_filter( 'autoptimize_filter_settingsscreen_tabs', array( $this, 'add_partner_tabs' ), 10, 1 );
         }
-        if ( is_multisite() && is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
+        if ( is_multisite() && is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
             add_action( 'network_admin_menu', array( $this, 'add_admin_menu' ) );
         } else {
             add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
