@@ -1,5 +1,7 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 class autoptimizeConfig
 {
@@ -59,12 +61,12 @@ class autoptimizeConfig
         return self::$instance;
     }
 
-	public function show_message() {
-		?>
-			<h1><?php _e( 'Autoptimize enabled in network', 'autoptimize' ); ?></h1>
-			<p><?php _e( 'If you want to enable per site configutation for Autoptimize, please contact your network administrator.', 'autoptimize' ); ?></p>
-		<?php
-	}
+    public function show_message() {
+        ?>
+            <h1><?php _e( 'Autoptimize enabled in network', 'autoptimize' ); ?></h1>
+            <p><?php _e( 'If you want to enable per site configutation for Autoptimize, please contact your network administrator.', 'autoptimize' ); ?></p>
+        <?php
+    }
 
     public function show()
     {
@@ -186,7 +188,12 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
 <div class="wrap">
 
 <?php if ( version_compare( PHP_VERSION, '5.3.0' ) < 0 ) { ?>
-<div class="notice-error notice"><?php echo '<p>' . sprintf( __( '<strong>You are using a very old version of PHP</strong> (5.2.x or older) which has <a href=%s>serious security and performance issues</a>. Support for PHP 5.5 and below will be removed in one of the next AO released, please ask your hoster to provide you with an upgrade path to 7.x.', 'autoptimize' ), '"http://blog.futtta.be/2016/03/15/why-would-you-still-be-on-php-5-2/" target="_blank"' ) . '</p>'; ?></div>
+<div class="notice-error notice">
+<?php
+    // translators: link to info about old PHP versions.
+    echo '<p>' . sprintf( __( '<strong>You are using a very old version of PHP</strong> (5.2.x or older) which has <a href=%s>serious security and performance issues</a>. Support for PHP 5.5 and below will be removed in one of the next AO released, please ask your hoster to provide you with an upgrade path to 7.x.', 'autoptimize' ), '"http://blog.futtta.be/2016/03/15/why-would-you-still-be-on-php-5-2/" target="_blank"' ) . '</p>';
+?>
+</div>
 <?php } ?>
 
 <?php if ( defined( 'AUTOPTIMIZE_LEGACY_MINIFIERS' ) ) { ?>
@@ -197,7 +204,10 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
 
 <!-- AO beta only. -->
 <div class="notice-info notice"><p>
-    <?php printf( __( 'Thanks for testing Autoptimize Beta! Please report any issues you might encounter in the %s.', 'autoptimize' ), '<a href="https://github.com/futtta/autoptimize/issues" target="_blank">GitHub Issues</a>' ); ?>
+<?php
+    // translators: link to Github issue list.
+    printf( __( 'Thanks for testing Autoptimize Beta! Please report any issues you might encounter in the %s.', 'autoptimize' ), '<a href="https://github.com/futtta/autoptimize/issues" target="_blank">GitHub Issues</a>' );
+?>
 </p></div>
 
 <div id="autoptimize_main">
@@ -205,14 +215,14 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
         <h1 id="ao_title"><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?>
         <span id="ao_adv_button">
         <?php if ( '1' === autoptimizeOption::get_option( 'autoptimize_show_adv', '1' ) ) { ?>
-            <a href="javascript:void(0);" id="ao_show_adv" class="button" style="display:none;"><span><?php _e("Show advanced settings","autoptimize") ?></span></a>
-            <a href="javascript:void(0);" id="ao_hide_adv" class="button"><span><?php _e("Hide advanced settings","autoptimize") ?></span></a>
+            <a href="javascript:void(0);" id="ao_show_adv" class="button" style="display:none;"><span><?php _e( 'Show advanced settings', 'autoptimize' ); ?></span></a>
+            <a href="javascript:void(0);" id="ao_hide_adv" class="button"><span><?php _e( 'Hide advanced settings', 'autoptimize' ); ?></span></a>
             <style>tr.ao_adv{display:table-row;} li.ao_adv{display:list-item;}</style>
-            <?php $hiddenClass = ''; ?>
+            <?php $hidden_class = ''; ?>
         <?php } else { ?>
-            <a href="javascript:void(0);" id="ao_show_adv" class="button"><span><?php _e("Show advanced settings","autoptimize") ?></span></a>
-            <a href="javascript:void(0);" id="ao_hide_adv" class="button" style="display:none;"><span><?php _e("Hide advanced settings","autoptimize") ?></span></a>
-            <?php $hiddenClass = 'hidden '; ?>
+            <a href="javascript:void(0);" id="ao_show_adv" class="button"><span><?php _e( 'Show advanced settings', 'autoptimize' ); ?></span></a>
+            <a href="javascript:void(0);" id="ao_hide_adv" class="button" style="display:none;"><span><?php _e( 'Hide advanced settings', 'autoptimize' ); ?></span></a>
+            <?php $hidden_class = 'hidden '; ?>
         <?php } ?>
         </span>
         </h1>
@@ -230,204 +240,218 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
 $blog_id = get_current_blog_id();
 if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && 1 === $blog_id ) {
 ?>
-	<li class="itemDetail">
-	<h2 class="itemTitle"><?php _e( 'Multisite Options', 'autoptimize' ); ?></h2>
-	<table class="form-table">
-	<tr valign="top">
-	<th scope="row"><?php _e( 'Enable site configuration?', 'autoptimize' ); ?></th>
-	<td><label class="cb_label"><input type="checkbox" id="autoptimize_enable_site_config" name="autoptimize_enable_site_config" <?php echo autoptimizeOption::get_option( 'autoptimize_enable_site_config' ) ? 'checked="checked" ' : ''; ?>/>
-	<?php _e( 'Enable Autoptimize configuration per site.', 'autoptimize' ); ?></label></td>
-	</tr>
-	</table>
-	</li>
+    <li class="itemDetail">
+    <h2 class="itemTitle"><?php _e( 'Multisite Options', 'autoptimize' ); ?></h2>
+    <table class="form-table">
+    <tr valign="top">
+    <th scope="row"><?php _e( 'Enable site configuration?', 'autoptimize' ); ?></th>
+    <td><label class="cb_label"><input type="checkbox" id="autoptimize_enable_site_config" name="autoptimize_enable_site_config" <?php echo autoptimizeOption::get_option( 'autoptimize_enable_site_config' ) ? 'checked="checked" ' : ''; ?>/>
+    <?php _e( 'Enable Autoptimize configuration per site.', 'autoptimize' ); ?></label></td>
+    </tr>
+    </table>
+    </li>
 <?php } ?>
 
 <li class="itemDetail">
-<h2 class="itemTitle"><?php _e('JavaScript Options','autoptimize'); ?></h2>
+<h2 class="itemTitle"><?php _e( 'JavaScript Options', 'autoptimize' ); ?></h2>
 <table class="form-table">
 <tr valign="top">
-<th scope="row"><?php _e('Optimize JavaScript Code?','autoptimize'); ?></th>
+<th scope="row"><?php _e( 'Optimize JavaScript Code?', 'autoptimize' ); ?></th>
 <td><input type="checkbox" id="autoptimize_js" name="autoptimize_js" <?php echo autoptimizeOption::get_option( 'autoptimize_js' ) ? 'checked="checked" ' : ''; ?>/></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>js_sub ao_adv">
+<tr valign="top" class="<?php echo $hidden_class; ?>js_sub ao_adv">
 <th scope="row"><?php _e( 'Aggregate JS-files?', 'autoptimize' ); ?></th>
-<td><label class="cb_label"><input type="checkbox" id="autoptimize_js_aggregate" name="autoptimize_js_aggregate" <?php echo $conf->get( 'autoptimize_js_aggregate' ) ? 'checked="checked" ':''; ?>/>
+<td><label class="cb_label"><input type="checkbox" id="autoptimize_js_aggregate" name="autoptimize_js_aggregate" <?php echo $conf->get( 'autoptimize_js_aggregate' ) ? 'checked="checked" ' : ''; ?>/>
 <?php _e( 'Aggregate all linked JS-files to have them loaded non-render blocking? If this option is off, the individual JS-files will remain in place but will be minified.', 'autoptimize' ); ?></label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>js_sub ao_adv js_aggregate">
-<th scope="row"><?php _e('Also aggregate inline JS?','autoptimize'); ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>js_sub ao_adv js_aggregate">
+<th scope="row"><?php _e( 'Also aggregate inline JS?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_js_include_inline" <?php echo autoptimizeOption::get_option( 'autoptimize_js_include_inline' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Let Autoptimize also extract JS from the HTML. <strong>Warning</strong>: this can make Autoptimize\'s cache size grow quickly, so only enable this if you know what you\'re doing.','autoptimize'); ?></label></td>
+<?php _e( 'Let Autoptimize also extract JS from the HTML. <strong>Warning</strong>: this can make Autoptimize\'s cache size grow quickly, so only enable this if you know what you\'re doing.', 'autoptimize' ); ?></label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>js_sub ao_adv js_aggregate">
-<th scope="row"><?php _e('Force JavaScript in &lt;head&gt;?','autoptimize'); ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>js_sub ao_adv js_aggregate">
+<th scope="row"><?php _e( 'Force JavaScript in &lt;head&gt;?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_js_forcehead" <?php echo autoptimizeOption::get_option( 'autoptimize_js_forcehead' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Load JavaScript early, this can potentially fix some JS-errors, but makes the JS render blocking.','autoptimize'); ?></label></td>
+<?php _e( 'Load JavaScript early, this can potentially fix some JS-errors, but makes the JS render blocking.', 'autoptimize' ); ?></label></td>
 </tr>
 <?php if ( autoptimizeOption::get_option( 'autoptimize_js_justhead' ) ) { ?>
-<tr valign="top" class="<?php echo $hiddenClass;?>js_sub ao_adv js_aggregate">
-<th scope="row"><?php _e('Look for scripts only in &lt;head&gt;?','autoptimize'); echo ' <i>'. __('(deprecated)','autoptimize') . '</i>'; ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>js_sub ao_adv js_aggregate">
+<th scope="row">
+<?php
+    _e( 'Look for scripts only in &lt;head&gt;?', 'autoptimize' );
+    echo ' <i>' . __( '(deprecated)', 'autoptimize' ) . '</i>';
+?>
+</th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_js_justhead" <?php echo autoptimizeOption::get_option( 'autoptimize_js_justhead' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Mostly useful in combination with previous option when using jQuery-based templates, but might help keeping cache size under control.','autoptimize'); ?></label></td>
+<?php _e( 'Mostly useful in combination with previous option when using jQuery-based templates, but might help keeping cache size under control.', 'autoptimize' ); ?></label></td>
 </tr>
 <?php } ?>
-<tr valign="top" class="<?php echo $hiddenClass;?>js_sub ao_adv">
-<th scope="row"><?php _e('Exclude scripts from Autoptimize:','autoptimize'); ?></th>
-<td><label><input type="text" style="width:100%;" name="autoptimize_js_exclude" value="<?php echo autoptimizeOption::get_option( 'autoptimize_js_exclude' , 'wp-includes/js/dist/, wp-includes/js/tinymce/, js/jquery/jquery.js' ); ?>"/><br />
-<?php _e('A comma-separated list of scripts you want to exclude from being optimized, for example \'whatever.js, another.js\' (without the quotes) to exclude those scripts from being aggregated by Autoptimize.','autoptimize'); ?></label></td>
+<tr valign="top" class="<?php echo $hidden_class; ?>js_sub ao_adv">
+<th scope="row"><?php _e( 'Exclude scripts from Autoptimize:', 'autoptimize' ); ?></th>
+<td><label><input type="text" style="width:100%;" name="autoptimize_js_exclude" value="<?php echo autoptimizeOption::get_option( 'autoptimize_js_exclude', 'wp-includes/js/dist/, wp-includes/js/tinymce/, js/jquery/jquery.js' ); ?>"/><br />
+<?php _e( 'A comma-separated list of scripts you want to exclude from being optimized, for example \'whatever.js, another.js\' (without the quotes) to exclude those scripts from being aggregated by Autoptimize.', 'autoptimize' ); ?></label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>js_sub ao_adv js_aggregate">
-<th scope="row"><?php _e('Add try-catch wrapping?','autoptimize'); ?></th>
-<td><label class="cb_label"><input type="checkbox" name="autoptimize_js_trycatch" <?php echo autoptimizeOption::get_option( 'autoptimize_js_trycatch' )?'checked="checked" ':''; ?>/>
-<?php _e('If your scripts break because of a JS-error, you might want to try this.','autoptimize'); ?></label></td>
+<tr valign="top" class="<?php echo $hidden_class; ?>js_sub ao_adv js_aggregate">
+<th scope="row"><?php _e( 'Add try-catch wrapping?', 'autoptimize' ); ?></th>
+<td><label class="cb_label"><input type="checkbox" name="autoptimize_js_trycatch" <?php echo autoptimizeOption::get_option( 'autoptimize_js_trycatch' ) ? 'checked="checked" ' : ''; ?>/>
+<?php _e( 'If your scripts break because of a JS-error, you might want to try this.', 'autoptimize' ); ?></label></td>
 </tr>
 </table>
 </li>
 
 <li class="itemDetail">
-<h2 class="itemTitle"><?php _e('CSS Options','autoptimize'); ?></h2>
+<h2 class="itemTitle"><?php _e( 'CSS Options', 'autoptimize' ); ?></h2>
 <table class="form-table">
 <tr valign="top">
-<th scope="row"><?php _e('Optimize CSS Code?','autoptimize'); ?></th>
+<th scope="row"><?php _e( 'Optimize CSS Code?', 'autoptimize' ); ?></th>
 <td><input type="checkbox" id="autoptimize_css" name="autoptimize_css" <?php echo autoptimizeOption::get_option( 'autoptimize_css' ) ? 'checked="checked" ' : ''; ?>/></td>
 </tr>
-<tr class="<?php echo $hiddenClass;?>css_sub ao_adv" valign="top">
+<tr class="<?php echo $hidden_class; ?>css_sub ao_adv" valign="top">
 <th scope="row"><?php _e( 'Aggregate CSS-files?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" id="autoptimize_css_aggregate" name="autoptimize_css_aggregate" <?php echo $conf->get( 'autoptimize_css_aggregate' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified.', 'autoptimize' ); ?></label></td>
+<?php _e( 'Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified.', 'autoptimize' ); ?></label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>css_sub ao_adv css_aggregate">
-<th scope="row"><?php _e('Also aggregate inline CSS?','autoptimize'); ?></th>
-<td><label class="cb_label"><input type="checkbox" name="autoptimize_css_include_inline" <?php echo autoptimizeOption::get_option( 'autoptimize_css_include_inline' , '1' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Check this option for Autoptimize to also aggregate CSS in the HTML.','autoptimize'); ?></label></td>
+<tr valign="top" class="<?php echo $hidden_class; ?>css_sub ao_adv css_aggregate">
+<th scope="row"><?php _e( 'Also aggregate inline CSS?', 'autoptimize' ); ?></th>
+<td><label class="cb_label"><input type="checkbox" name="autoptimize_css_include_inline" <?php echo autoptimizeOption::get_option( 'autoptimize_css_include_inline', '1' ) ? 'checked="checked" ' : ''; ?>/>
+<?php _e( 'Check this option for Autoptimize to also aggregate CSS in the HTML.', 'autoptimize' ); ?></label></td>
 </tr>
-<tr class="<?php echo $hiddenClass;?>css_sub ao_adv css_aggregate" valign="top">
-<th scope="row"><?php _e('Generate data: URIs for images?','autoptimize'); ?></th>
+<tr class="<?php echo $hidden_class; ?>css_sub ao_adv css_aggregate" valign="top">
+<th scope="row"><?php _e( 'Generate data: URIs for images?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_css_datauris" <?php echo autoptimizeOption::get_option( 'autoptimize_css_datauris' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Enable this to include small background-images in the CSS itself instead of as separate downloads.','autoptimize'); ?></label></td>
+<?php _e( 'Enable this to include small background-images in the CSS itself instead of as separate downloads.', 'autoptimize' ); ?></label></td>
 </tr>
 <?php if ( autoptimizeOption::get_option( 'autoptimize_css_justhead' ) ) { ?>
-<tr valign="top" class="<?php echo $hiddenClass;?>css_sub ao_adv css_aggregate">
-<th scope="row"><?php _e('Look for styles only in &lt;head&gt;?','autoptimize'); echo ' <i>'. __('(deprecated)','autoptimize') . '</i>'; ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>css_sub ao_adv css_aggregate">
+<th scope="row">
+<?php
+_e( 'Look for styles only in &lt;head&gt;?', 'autoptimize' );
+echo ' <i>' . __( '(deprecated)', 'autoptimize' ) . '</i>';
+?>
+</th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_css_justhead" <?php echo autoptimizeOption::get_option( 'autoptimize_css_justhead' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Don\'t autoptimize CSS outside the head-section. If the cache gets big, you might want to enable this.','autoptimize'); ?></label></td>
+<?php _e( 'Don\'t autoptimize CSS outside the head-section. If the cache gets big, you might want to enable this.', 'autoptimize' ); ?></label></td>
 </tr>
 <?php } ?>
-<tr valign="top" class="<?php echo $hiddenClass;?>css_sub ao_adv">
-<th scope="row"><?php _e('Inline and Defer CSS?','autoptimize'); ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>css_sub ao_adv">
+<th scope="row"><?php _e( 'Inline and Defer CSS?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_css_defer" id="autoptimize_css_defer" <?php echo autoptimizeOption::get_option( 'autoptimize_css_defer' ) ? 'checked="checked" ' : ''; ?>/>
 <?php
 _e( 'Inline "above the fold CSS" while loading the main autoptimized CSS only after page load. <a href="http://wordpress.org/plugins/autoptimize/faq/" target="_blank">Check the FAQ</a> for more info.', 'autoptimize' );
 if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-criticalcss/ao_criticss_aas.php' ) ) {
     echo ' ';
     $critcss_install_url = network_admin_url() . 'plugin-install.php?s=autoptimize+criticalcss&tab=search&type=term';
-    echo sprintf( __( 'This can be fully automated for different types of pages with the %s.', 'autoptimize' ), '<a href="'.$critcss_install_url.'">Autoptimize CriticalCSS Power-Up</a>' );
+    // translators: links to plugin install screen with "autoptimize critical CSS" search.
+    echo sprintf( __( 'This can be fully automated for different types of pages with the %s.', 'autoptimize' ), '<a href="' . $critcss_install_url . '">Autoptimize CriticalCSS Power-Up</a>' );
 }
 ?>
 </label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>css_sub ao_adv" id="autoptimize_css_defer_inline">
+<tr valign="top" class="<?php echo $hidden_class; ?>css_sub ao_adv" id="autoptimize_css_defer_inline">
 <th scope="row"></th>
-<td><label><textarea rows="10" cols="10" style="width:100%;" placeholder="<?php _e( 'Paste the above the fold CSS here. You can leave this empty when using the automated Critical CSS integration.' , 'autoptimize' ); ?>" name="autoptimize_css_defer_inline"><?php echo autoptimizeOption::get_option( 'autoptimize_css_defer_inline' ); ?></textarea></label></td>
+<td><label><textarea rows="10" cols="10" style="width:100%;" placeholder="<?php _e( 'Paste the above the fold CSS here. You can leave this empty when using the automated Critical CSS integration.', 'autoptimize' ); ?>" name="autoptimize_css_defer_inline"><?php echo autoptimizeOption::get_option( 'autoptimize_css_defer_inline' ); ?></textarea></label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>ao_adv css_sub css_aggregate">
-<th scope="row"><?php _e('Inline all CSS?','autoptimize'); ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>ao_adv css_sub css_aggregate">
+<th scope="row"><?php _e( 'Inline all CSS?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" id="autoptimize_css_inline" name="autoptimize_css_inline" <?php echo autoptimizeOption::get_option( 'autoptimize_css_inline' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Inlining all CSS can improve performance for sites with a low pageviews/ visitor-rate, but may slow down performance otherwise.','autoptimize'); ?></label></td>
+<?php _e( 'Inlining all CSS can improve performance for sites with a low pageviews/ visitor-rate, but may slow down performance otherwise.', 'autoptimize' ); ?></label></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>ao_adv css_sub">
-<th scope="row"><?php _e('Exclude CSS from Autoptimize:','autoptimize'); ?></th>
+<tr valign="top" class="<?php echo $hidden_class; ?>ao_adv css_sub">
+<th scope="row"><?php _e( 'Exclude CSS from Autoptimize:', 'autoptimize' ); ?></th>
 <td><label><input type="text" style="width:100%;" name="autoptimize_css_exclude" value="<?php echo autoptimizeOption::get_option( 'autoptimize_css_exclude', 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css' ); ?>"/><br />
-<?php _e('A comma-separated list of CSS you want to exclude from being optimized.','autoptimize'); ?></label></td>
+<?php _e( 'A comma-separated list of CSS you want to exclude from being optimized.', 'autoptimize' ); ?></label></td>
 </tr>
 </table>
 </li>
 
 <li class="itemDetail">
-<h2 class="itemTitle"><?php _e('HTML Options','autoptimize'); ?></h2>
+<h2 class="itemTitle"><?php _e( 'HTML Options', 'autoptimize' ); ?></h2>
 <table class="form-table">
 <tr valign="top">
-<th scope="row"><?php _e('Optimize HTML Code?','autoptimize'); ?></th>
+<th scope="row"><?php _e( 'Optimize HTML Code?', 'autoptimize' ); ?></th>
 <td><input type="checkbox" id="autoptimize_html" name="autoptimize_html" <?php echo autoptimizeOption::get_option( 'autoptimize_html' ) ? 'checked="checked" ' : ''; ?>/></td>
 </tr>
-<tr class="<?php echo $hiddenClass;?>html_sub ao_adv" valign="top">
-<th scope="row"><?php _e('Keep HTML comments?','autoptimize'); ?></th>
+<tr class="<?php echo $hidden_class; ?>html_sub ao_adv" valign="top">
+<th scope="row"><?php _e( 'Keep HTML comments?', 'autoptimize' ); ?></th>
 <td><label class="cb_label"><input type="checkbox" name="autoptimize_html_keepcomments" <?php echo autoptimizeOption::get_option( 'autoptimize_html_keepcomments' ) ? 'checked="checked" ' : ''; ?>/>
-<?php _e('Enable this if you want HTML comments to remain in the page.','autoptimize'); ?></label></td>
+<?php _e( 'Enable this if you want HTML comments to remain in the page.', 'autoptimize' ); ?></label></td>
 </tr>
 </table>
 </li>
 
 <li class="itemDetail">
-<h2 class="itemTitle"><?php _e('CDN Options','autoptimize'); ?></h2>
+<h2 class="itemTitle"><?php _e( 'CDN Options', 'autoptimize' ); ?></h2>
 <table class="form-table">
 <tr valign="top">
-<th scope="row"><?php _e('CDN Base URL','autoptimize'); ?></th>
-<td><label><input id="cdn_url" type="text" name="autoptimize_cdn_url" pattern="^(https?:)?\/\/([\da-z\.-]+)\.([\da-z\.]{2,6})([\/\w \.-]*)*(:\d{2,5})?\/?$" style="width:100%" value="<?php echo esc_url( autoptimizeOption::get_option( 'autoptimize_cdn_url', '' ), array( "http","https" ) ); ?>" /><br />
-<?php _e('Enter your CDN root URL to enable CDN for Autoptimized files. The URL can be http, https or protocol-relative (e.g. <code>//cdn.example.com/</code>). This is not needed for Cloudflare.','autoptimize'); ?></label></td>
+<th scope="row"><?php _e( 'CDN Base URL', 'autoptimize' ); ?></th>
+<td><label><input id="cdn_url" type="text" name="autoptimize_cdn_url" pattern="^(https?:)?\/\/([\da-z\.-]+)\.([\da-z\.]{2,6})([\/\w \.-]*)*(:\d{2,5})?\/?$" style="width:100%" value="<?php echo esc_url( autoptimizeOption::get_option( 'autoptimize_cdn_url', '' ), array( 'http', 'https' ) ); ?>" /><br />
+<?php _e( 'Enter your CDN root URL to enable CDN for Autoptimized files. The URL can be http, https or protocol-relative (e.g. <code>//cdn.example.com/</code>). This is not needed for Cloudflare.', 'autoptimize' ); ?></label></td>
 </tr>
 </table>
 </li>
 
-<li class="<?php echo $hiddenClass;?>itemDetail ao_adv">
-<h2 class="itemTitle"><?php _e('Cache Info','autoptimize'); ?></h2>
+<li class="<?php echo $hidden_class; ?>itemDetail ao_adv">
+<h2 class="itemTitle"><?php _e( 'Cache Info', 'autoptimize' ); ?></h2>
 <table class="form-table" >
-<tr valign="top" class="<?php echo $hiddenClass;?>ao_adv">
-<th scope="row"><?php _e('Cache folder','autoptimize'); ?></th>
-<td><?php echo htmlentities(AUTOPTIMIZE_CACHE_DIR); ?></td>
+<tr valign="top" class="<?php echo $hidden_class; ?>ao_adv">
+<th scope="row"><?php _e( 'Cache folder', 'autoptimize' ); ?></th>
+<td><?php echo htmlentities( AUTOPTIMIZE_CACHE_DIR ); ?></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>ao_adv">
-<th scope="row"><?php _e('Can we write?','autoptimize'); ?></th>
-<td><?php echo (autoptimizeCache::cacheavail() ? __('Yes','autoptimize') : __('No','autoptimize')); ?></td>
+<tr valign="top" class="<?php echo $hidden_class; ?>ao_adv">
+<th scope="row"><?php _e( 'Can we write?', 'autoptimize' ); ?></th>
+<td><?php echo ( autoptimizeCache::cacheavail() ? __( 'Yes', 'autoptimize' ) : __( 'No', 'autoptimize' ) ); ?></td>
 </tr>
-<tr valign="top" class="<?php echo $hiddenClass;?>ao_adv">
-<th scope="row"><?php _e('Cached styles and scripts','autoptimize'); ?></th>
-<td><?php
-    $AOstatArr = autoptimizeCache::stats();
-    if ( ! empty( $AOstatArr ) && is_array( $AOstatArr ) ) {
-        $AOcacheSize = size_format( $AOstatArr[1], 2 );
-        $details = '';
-        if ( $AOcacheSize > 0 ) {
-            $details = ', ~' . $AOcacheSize . ' total';
+<tr valign="top" class="<?php echo $hidden_class; ?>ao_adv">
+<th scope="row"><?php _e( 'Cached styles and scripts', 'autoptimize' ); ?></th>
+<td>
+    <?php
+    $ao_stat_arr = autoptimizeCache::stats();
+    if ( ! empty( $ao_stat_arr ) && is_array( $ao_stat_arr ) ) {
+        $ao_cache_size = size_format( $ao_stat_arr[1], 2 );
+        $details       = '';
+        if ( $ao_cache_size > 0 ) {
+            $details = ', ~' . $ao_cache_size . ' total';
         }
-        printf( __( '%1$s files, totalling %2$s Kbytes (calculated at %3$s)', 'autoptimize' ), $AOstatArr[0], $AOcacheSize, date( 'H:i e', $AOstatArr[2] ) );
+        // translators: Kilobytes + timestamp shown.
+        printf( __( '%1$s files, totalling %2$s Kbytes (calculated at %3$s)', 'autoptimize' ), $ao_stat_arr[0], $ao_cache_size, date( 'H:i e', $ao_stat_arr[2] ) );
     }
-?></td>
+    ?>
+</td>
 </tr>
 </table>
 </li>
 
-<li class="<?php echo $hiddenClass;?>itemDetail ao_adv">
-<h2 class="itemTitle"><?php _e('Misc Options','autoptimize'); ?></h2>
+<li class="<?php echo $hidden_class; ?>itemDetail ao_adv">
+<h2 class="itemTitle"><?php _e( 'Misc Options', 'autoptimize' ); ?></h2>
 <table class="form-table">
-    <tr valign="top" class="<?php echo $hiddenClass;?>ao_adv">
-    <th scope="row"><?php _e('Save aggregated script/css as static files?','autoptimize'); ?></th>
+    <tr valign="top" class="<?php echo $hidden_class; ?>ao_adv">
+    <th scope="row"><?php _e( 'Save aggregated script/css as static files?', 'autoptimize' ); ?></th>
     <td><label class="cb_label"><input type="checkbox" name="autoptimize_cache_nogzip" <?php echo autoptimizeOption::get_option( 'autoptimize_cache_nogzip', '1' ) ? 'checked="checked" ' : ''; ?>/>
-    <?php _e('By default files saved are static css/js, uncheck this option if your webserver doesn\'t properly handle the compression and expiry.','autoptimize'); ?></label></td>
+    <?php _e( 'By default files saved are static css/js, uncheck this option if your webserver doesn\'t properly handle the compression and expiry.', 'autoptimize' ); ?></label></td>
     </tr>
     <?php
     $_min_excl_class = 'ao_adv';
-    if ( !$conf->get( 'autoptimize_css_aggregate' ) && !$conf->get( 'autoptimize_js_aggregate' ) ) {
+    if ( ! $conf->get( 'autoptimize_css_aggregate' ) && ! $conf->get( 'autoptimize_js_aggregate' ) ) {
         $_min_excl_class = ' hidden';
     }
     ?>
-    <tr valign="top" id="min_excl_row" class="<?php echo $hiddenClass.$_min_excl_class; ?>">
-        <th scope="row"><?php _e('Minify excluded CSS and JS files?','autoptimize'); ?></th>
+    <tr valign="top" id="min_excl_row" class="<?php echo $hidden_class . $_min_excl_class; ?>">
+        <th scope="row"><?php _e( 'Minify excluded CSS and JS files?', 'autoptimize' ); ?></th>
         <td><label class="cb_label"><input type="checkbox" name="autoptimize_minify_excluded" <?php echo autoptimizeOption::get_option( 'autoptimize_minify_excluded', '1' ) ? 'checked="checked" ' : ''; ?>/>
-        <?php _e('When aggregating JS or CSS, excluded files that are not minified (based on filename) are by default minified by Autoptimize despite being excluded. Uncheck this option if anything breaks despite excluding.','autoptimize'); ?></label></td>
+        <?php _e( 'When aggregating JS or CSS, excluded files that are not minified (based on filename) are by default minified by Autoptimize despite being excluded. Uncheck this option if anything breaks despite excluding.', 'autoptimize' ); ?></label></td>
     </tr>
-    <tr valign="top" class="<?php echo $hiddenClass;?>ao_adv">
-    <th scope="row"><?php _e('Also optimize for logged in users?','autoptimize'); ?></th>
+    <tr valign="top" class="<?php echo $hidden_class; ?>ao_adv">
+    <th scope="row"><?php _e( 'Also optimize for logged in users?', 'autoptimize' ); ?></th>
     <td><label class="cb_label"><input type="checkbox" name="autoptimize_optimize_logged" <?php echo autoptimizeOption::get_option( 'autoptimize_optimize_logged', '1' ) ? 'checked="checked" ' : ''; ?>/>
-    <?php _e('By default Autoptimize is also active for logged on users, uncheck not to optimize when logged in e.g. to use a pagebuilder.','autoptimize'); ?></label></td>
+    <?php _e( 'By default Autoptimize is also active for logged on users, uncheck not to optimize when logged in e.g. to use a pagebuilder.', 'autoptimize' ); ?></label></td>
     </tr>
     <?php
-    if ( function_exists("is_checkout") || function_exists("is_cart") || function_exists("edd_is_checkout") || function_exists("wpsc_is_cart") || function_exists("wpsc_is_checkout") ) {
+    if ( function_exists( 'is_checkout' ) || function_exists( 'is_cart' ) || function_exists( 'edd_is_checkout' ) || function_exists( 'wpsc_is_cart' ) || function_exists( 'wpsc_is_checkout' ) ) {
     ?>
-    <tr valign="top" class="<?php echo $hiddenClass;?>ao_adv">
-        <th scope="row"><?php _e('Also optimize shop cart/ checkout?','autoptimize'); ?></th>
+    <tr valign="top" class="<?php echo $hidden_class; ?>ao_adv">
+        <th scope="row"><?php _e( 'Also optimize shop cart/ checkout?', 'autoptimize' ); ?></th>
         <td><label class="cb_label"><input type="checkbox" name="autoptimize_optimize_checkout" <?php echo autoptimizeOption::get_option( 'autoptimize_optimize_checkout', '1' ) ? 'checked="checked" ' : ''; ?>/>
-            <?php _e('By default Autoptimize is also active on your shop\'s cart/ checkout, uncheck not to optimize those.','autoptimize'); ?></label>
+            <?php _e( 'By default Autoptimize is also active on your shop\'s cart/ checkout, uncheck not to optimize those.', 'autoptimize' ); ?></label>
         </td>
     </tr>
     <?php } ?>
@@ -439,8 +463,8 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
 <input type="hidden" id="autoptimize_show_adv" name="autoptimize_show_adv" value="<?php echo autoptimizeOption::get_option( 'autoptimize_show_adv', '1' ); ?>">
 
 <p class="submit">
-<input type="submit" class="button-secondary" value="<?php _e('Save Changes','autoptimize') ?>" />
-<input type="submit" class="button-primary" name="autoptimize_cache_clean" value="<?php _e('Save Changes and Empty Cache','autoptimize') ?>" />
+<input type="submit" class="button-secondary" value="<?php _e( 'Save Changes', 'autoptimize' ); ?>" />
+<input type="submit" class="button-primary" name="autoptimize_cache_clean" value="<?php _e( 'Save Changes and Empty Cache', 'autoptimize' ); ?>" />
 </p>
 
 </form>
@@ -450,45 +474,45 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
       <ul>
     <?php
     if ( $this->settings_screen_do_remote_http ) {
-        $AO_banner = get_transient( 'autoptimize_banner' );
-        if ( empty( $AO_banner ) ) {
-            $banner_resp = wp_remote_get( 'https://misc.optimizingmatters.com/autoptimize_news.html?ao_ver='.AUTOPTIMIZE_PLUGIN_VERSION );
+        $ao_banner = get_transient( 'autoptimize_banner' );
+        if ( empty( $ao_banner ) ) {
+            $banner_resp = wp_remote_get( 'https://misc.optimizingmatters.com/autoptimize_news.html?ao_ver=' . AUTOPTIMIZE_PLUGIN_VERSION );
             if ( ! is_wp_error( $banner_resp ) ) {
                 if ( '200' == wp_remote_retrieve_response_code( $banner_resp ) ) {
-                    $AO_banner = wp_kses_post( wp_remote_retrieve_body( $banner_resp ) );
-                    set_transient('autoptimize_banner', $AO_banner, DAY_IN_SECONDS);
+                    $ao_banner = wp_kses_post( wp_remote_retrieve_body( $banner_resp ) );
+                    set_transient( 'autoptimize_banner', $ao_banner, DAY_IN_SECONDS );
                 }
             }
         }
-        echo $AO_banner;
+        echo $ao_banner;
     }
     ?>
-        <li><?php _e("Need help? <a href='https://wordpress.org/plugins/autoptimize/faq/'>Check out the FAQ here</a>.","autoptimize"); ?></li>
-        <li><?php _e("Happy with Autoptimize?","autoptimize"); ?><br /><a href="<?php echo network_admin_url(); ?>plugin-install.php?tab=search&type=author&s=optimizingmatters"><?php _e("Try my other plugins!","autoptimize"); ?></a></li>
+        <li><?php _e( "Need help? <a href='https://wordpress.org/plugins/autoptimize/faq/'>Check out the FAQ here</a>.", 'autoptimize' ); ?></li>
+        <li><?php _e( 'Happy with Autoptimize?', 'autoptimize' ); ?><br /><a href="<?php echo network_admin_url(); ?>plugin-install.php?tab=search&type=author&s=optimizingmatters"><?php _e( 'Try my other plugins!', 'autoptimize' ); ?></a></li>
     </ul>
     </div>
     <div style="margin-left:10px;margin-top:-5px;">
         <h2>
-            <?php _e("futtta about","autoptimize") ?>
+            <?php _e( 'futtta about', 'autoptimize' ); ?>
             <select id="feed_dropdown" >
-                <option value="1"><?php _e("Autoptimize","autoptimize") ?></option>
-                <option value="2"><?php _e("WordPress","autoptimize") ?></option>
-                <option value="3"><?php _e("Web Technology","autoptimize") ?></option>
+                <option value="1"><?php _e( 'Autoptimize', 'autoptimize' ); ?></option>
+                <option value="2"><?php _e( 'WordPress', 'autoptimize' ); ?></option>
+                <option value="3"><?php _e( 'Web Technology', 'autoptimize' ); ?></option>
             </select>
         </h2>
         <div id="futtta_feed">
             <div id="autoptimizefeed">
-                <?php $this->getFutttaFeeds("http://feeds.feedburner.com/futtta_autoptimize"); ?>
+                <?php $this->get_futtta_feeds( 'http://feeds.feedburner.com/futtta_autoptimize' ); ?>
             </div>
             <div id="wordpressfeed">
-                <?php $this->getFutttaFeeds("http://feeds.feedburner.com/futtta_wordpress"); ?>
+                <?php $this->get_futtta_feeds( 'http://feeds.feedburner.com/futtta_wordpress' ); ?>
             </div>
             <div id="webtechfeed">
-                <?php $this->getFutttaFeeds("http://feeds.feedburner.com/futtta_webtech"); ?>
+                <?php $this->get_futtta_feeds( 'http://feeds.feedburner.com/futtta_webtech' ); ?>
             </div>
         </div>
     </div>
-    <div style="float:right;margin:50px 15px;"><a href="http://blog.futtta.be/2013/10/21/do-not-donate-to-me/" target="_blank"><img width="100px" height="85px" src="<?php echo plugins_url().'/'.plugin_basename(dirname(__FILE__)).'/external/do_not_donate_smallest.png'; ?>" title="<?php _e("Do not donate for this plugin!","autoptimize"); ?>"></a></div>
+    <div style="float:right;margin:50px 15px;"><a href="http://blog.futtta.be/2013/10/21/do-not-donate-to-me/" target="_blank"><img width="100px" height="85px" src="<?php echo plugins_url() . '/' . plugin_basename( dirname( __FILE__ ) ) . '/external/do_not_donate_smallest.png'; ?>" title="<?php _e( 'Do not donate for this plugin!', 'autoptimize' ); ?>"></a></div>
 </div>
 
 <script type="text/javascript">
@@ -660,8 +684,8 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
     public function addmenu()
     {
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
-            $hook = add_submenu_page( 'settings.php',  __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_network_options', 'autoptimize', array( $this, 'show' ) );
-        } else if ( ! is_multisite() || 'on' === autoptimizeOption::get_option( 'autoptimize_enable_site_config' ) ) {
+            $hook = add_submenu_page( 'settings.php', __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_network_options', 'autoptimize', array( $this, 'show' ) );
+        } elseif ( ! is_multisite() || 'on' === autoptimizeOption::get_option( 'autoptimize_enable_site_config' ) ) {
             $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show' ) );
         } else {
             $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show_message' ) );
@@ -712,7 +736,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
         register_setting( 'autoptimize', 'autoptimize_minify_excluded' );
     }
 
-    public function setmeta($links, $file = null)
+    public function setmeta( $links, $file = null )
     {
         // Inspired on http://wpengineer.com/meta-links-for-wordpress-plugins/.
         // Do it only once - saves time.
@@ -730,7 +754,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
             // If it's us, add the link.
             if ( $file === $plugin ) {
                 $newlink = array( sprintf( '<a href="options-general.php?page=autoptimize">%s</a>', __( 'Settings' ) ) );
-                $links = array_merge( $links, $newlink );
+                $links   = array_merge( $links, $newlink );
             }
         }
 
@@ -743,31 +767,31 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
     public static function get_defaults()
     {
         static $config = array(
-            'autoptimize_html' => 0,
-            'autoptimize_html_keepcomments' => 0,
+            'autoptimize_html'               => 0,
+            'autoptimize_html_keepcomments'  => 0,
             'autoptimize_enable_site_config' => 0,
-            'autoptimize_js' => 0,
-            'autoptimize_js_aggregate' => 1,
-            'autoptimize_js_exclude' => 'wp-includes/js/dist/, wp-includes/js/tinymce/, js/jquery/jquery.js',
-            'autoptimize_js_trycatch' => 0,
-            'autoptimize_js_justhead' => 0,
-            'autoptimize_js_include_inline' => 0,
-            'autoptimize_js_forcehead' => 0,
-            'autoptimize_css' => 0,
-            'autoptimize_css_aggregate' => 1,
-            'autoptimize_css_exclude' => 'admin-bar.min.css, dashicons.min.css, wp-content/cache/, wp-content/uploads/',
-            'autoptimize_css_justhead' => 0,
+            'autoptimize_js'                 => 0,
+            'autoptimize_js_aggregate'       => 1,
+            'autoptimize_js_exclude'         => 'wp-includes/js/dist/, wp-includes/js/tinymce/, js/jquery/jquery.js',
+            'autoptimize_js_trycatch'        => 0,
+            'autoptimize_js_justhead'        => 0,
+            'autoptimize_js_include_inline'  => 0,
+            'autoptimize_js_forcehead'       => 0,
+            'autoptimize_css'                => 0,
+            'autoptimize_css_aggregate'      => 1,
+            'autoptimize_css_exclude'        => 'admin-bar.min.css, dashicons.min.css, wp-content/cache/, wp-content/uploads/',
+            'autoptimize_css_justhead'       => 0,
             'autoptimize_css_include_inline' => 1,
-            'autoptimize_css_defer' => 0,
-            'autoptimize_css_defer_inline' => '',
-            'autoptimize_css_inline' => 0,
-            'autoptimize_css_datauris' => 0,
-            'autoptimize_cdn_url' => '',
-            'autoptimize_cache_nogzip' => 1,
-            'autoptimize_show_adv' => 1,
-            'autoptimize_optimize_logged' => 1,
-            'autoptimize_optimize_checkout' => 1,
-            'autoptimize_minify_excluded' => 1,
+            'autoptimize_css_defer'          => 0,
+            'autoptimize_css_defer_inline'   => '',
+            'autoptimize_css_inline'         => 0,
+            'autoptimize_css_datauris'       => 0,
+            'autoptimize_cdn_url'            => '',
+            'autoptimize_cache_nogzip'       => 1,
+            'autoptimize_show_adv'           => 1,
+            'autoptimize_optimize_logged'    => 1,
+            'autoptimize_optimize_checkout'  => 1,
+            'autoptimize_minify_excluded'    => 1,
         );
 
         return $config;
@@ -816,7 +840,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
      */
     public static function get_ao_css_preload_polyfill()
     {
-        $preload_poly = apply_filters('autoptimize_css_preload_polyfill','<script data-cfasync=\'false\'>!function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};if(e.support=function(){var e;try{e=t.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),e.bindMediaToggle=function(t){function e(){t.media=a}var a=t.media||"all";t.addEventListener?t.addEventListener("load",e):t.attachEvent&&t.attachEvent("onload",e),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(e,3e3)},e.poly=function(){if(!e.support())for(var a=t.document.getElementsByTagName("link"),n=0;n<a.length;n++){var o=a[n];"preload"!==o.rel||"style"!==o.getAttribute("as")||o.getAttribute("data-loadcss")||(o.setAttribute("data-loadcss",!0),e.bindMediaToggle(o))}},!e.support()){e.poly();var a=t.setInterval(e.poly,500);t.addEventListener?t.addEventListener("load",function(){e.poly(),t.clearInterval(a)}):t.attachEvent&&t.attachEvent("onload",function(){e.poly(),t.clearInterval(a)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:t.loadCSS=loadCSS}("undefined"!=typeof global?global:this);</script>');
+        $preload_poly = apply_filters( 'autoptimize_css_preload_polyfill', '<script data-cfasync=\'false\'>!function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};if(e.support=function(){var e;try{e=t.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),e.bindMediaToggle=function(t){function e(){t.media=a}var a=t.media||"all";t.addEventListener?t.addEventListener("load",e):t.attachEvent&&t.attachEvent("onload",e),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(e,3e3)},e.poly=function(){if(!e.support())for(var a=t.document.getElementsByTagName("link"),n=0;n<a.length;n++){var o=a[n];"preload"!==o.rel||"style"!==o.getAttribute("as")||o.getAttribute("data-loadcss")||(o.setAttribute("data-loadcss",!0),e.bindMediaToggle(o))}},!e.support()){e.poly();var a=t.setInterval(e.poly,500);t.addEventListener?t.addEventListener("load",function(){e.poly(),t.clearInterval(a)}):t.attachEvent&&t.attachEvent("onload",function(){e.poly(),t.clearInterval(a)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:t.loadCSS=loadCSS}("undefined"!=typeof global?global:this);</script>' );
         return $preload_poly;
     }
 
@@ -827,11 +851,11 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
      */
     public static function get_ao_css_preload_onload()
     {
-        $preload_onload = apply_filters('autoptimize_filter_css_preload_onload',"this.onload=null;this.rel='stylesheet'");
+        $preload_onload = apply_filters( 'autoptimize_filter_css_preload_onload', "this.onload=null;this.rel='stylesheet'" );
         return $preload_onload;
     }
 
-    public function get($key)
+    public function get( $key )
     {
         if ( ! is_array( $this->config ) ) {
             // Default config.
@@ -857,24 +881,24 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
         return false;
     }
 
-    private function getFutttaFeeds($url) {
+    private function get_futtta_feeds( $url ) {
         if ( $this->settings_screen_do_remote_http ) {
-            $rss = fetch_feed( $url );
+            $rss      = fetch_feed( $url );
             $maxitems = 0;
 
             if ( ! is_wp_error( $rss ) ) {
-                $maxitems = $rss->get_item_quantity( 7 );
+                $maxitems  = $rss->get_item_quantity( 7 );
                 $rss_items = $rss->get_items( 0, $maxitems );
             }
             ?>
             <ul>
-                <?php if ( $maxitems == 0 ) : ?>
+                <?php if ( 0 == $maxitems ) : ?>
                     <li><?php _e( 'No items', 'autoptimize' ); ?></li>
                 <?php else : ?>
                     <?php foreach ( $rss_items as $item ) : ?>
                         <li>
                             <a href="<?php echo esc_url( $item->get_permalink() ); ?>"
-                                title="<?php printf( __( 'Posted %s', 'autoptimize' ), $item->get_date('j F Y | g:i a') ); ?>">
+                                title="<?php printf( __( 'Posted %s', 'autoptimize' ), $item->get_date( 'j F Y | g:i a' ) ); ?>">
                                 <?php echo esc_html( $item->get_title() ); ?>
                             </a>
                         </li>
@@ -885,33 +909,33 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
         }
     }
 
-    // based on http://wordpress.stackexchange.com/a/58826
+    // based on http://wordpress.stackexchange.com/a/58826 .
     static function ao_admin_tabs()
     {
-        $tabs = apply_filters( 'autoptimize_filter_settingsscreen_tabs' ,array( 'autoptimize' => __( 'JS, CSS  &amp; HTML', 'autoptimize' ) ) );
-        $tabContent = '';
-        $tabs_count = count($tabs);
+        $tabs        = apply_filters( 'autoptimize_filter_settingsscreen_tabs', array( 'autoptimize' => __( 'JS, CSS  &amp; HTML', 'autoptimize' ) ) );
+        $tab_content = '';
+        $tabs_count  = count( $tabs );
         if ( $tabs_count > 1 ) {
             if ( isset( $_GET['page'] ) ) {
-                $currentId = $_GET['page'];
+                $current_id = $_GET['page'];
             } else {
-                $currentId = "autoptimize";
+                $current_id = 'autoptimize';
             }
-            $tabContent .= '<h2 class="nav-tab-wrapper">';
-            foreach ($tabs as $tabId => $tabName) {
-                if ( $currentId == $tabId ) {
+            $tab_content .= '<h2 class="nav-tab-wrapper">';
+            foreach ( $tabs as $tab_id => $tab_name ) {
+                if ( $current_id == $tab_id ) {
                     $class = ' nav-tab-active';
-                } else{
+                } else {
                     $class = '';
                 }
-                $tabContent .= '<a class="nav-tab' . $class . '" href="?page=' . $tabId . '">' . $tabName . '</a>';
+                $tab_content .= '<a class="nav-tab' . $class . '" href="?page=' . $tab_id . '">' . $tab_name . '</a>';
             }
-            $tabContent .= '</h2>';
+            $tab_content .= '</h2>';
         } else {
-            $tabContent = '<hr/>';
+            $tab_content = '<hr/>';
         }
 
-        return $tabContent;
+        return $tab_content;
     }
 
     /**
