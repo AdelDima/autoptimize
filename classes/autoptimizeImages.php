@@ -919,7 +919,7 @@ class autoptimizeImages
     public function imgopt_admin_menu()
     {
         // no acces if multisite and not network admin and no site config allowed.
-        if ( ! is_multisite() || is_network_admin() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
+        if ( autoptimizeConfig::should_show_menu_tabs() ) {
             add_submenu_page(
                 null,
                 'autoptimize_imgopt',
@@ -934,7 +934,9 @@ class autoptimizeImages
 
     public function add_imgopt_tab( $in )
     {
-        $in = array_merge( $in, array( 'autoptimize_imgopt' => __( 'Images', 'autoptimize' ) ) );
+        if ( autoptimizeConfig::should_show_menu_tabs() ) {
+            $in = array_merge( $in, array( 'autoptimize_imgopt' => __( 'Images', 'autoptimize' ) ) );
+        }
 
         return $in;
     }

@@ -61,14 +61,17 @@ class autoptimizeConfig
         return self::$instance;
     }
 
-    public function show_message() {
+    public function show_network_message() {
         ?>
-            <h1><?php _e( 'Autoptimize enabled in network', 'autoptimize' ); ?></h1>
-            <p><?php _e( 'If you want to enable per site configutation for Autoptimize, please contact your network administrator.', 'autoptimize' ); ?></p>
+        <div class="wrap">
+            <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+            <?php echo $this->ao_admin_tabs(); ?>
+            <p style="font-size:120%;"><?php _e( 'Autoptimize is enabled and configured on a WordPress network level. Please contact your network administrator if you need Autoptimize settings changed.', 'autoptimize' ); ?></p>
+        </div>
         <?php
     }
 
-    public function show()
+    public function show_config()
     {
         $conf = self::instance();
 ?>
@@ -684,11 +687,11 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
     public function addmenu()
     {
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
-            $hook = add_submenu_page( 'settings.php', __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_network_options', 'autoptimize', array( $this, 'show' ) );
+            $hook = add_submenu_page( 'settings.php', __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_network_options', 'autoptimize', array( $this, 'show_config' ) );
         } elseif ( ! is_multisite() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
-            $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show' ) );
+            $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show_config' ) );
         } else {
-            $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show_message' ) );
+            $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show_network_message' ) );
         }
 
         add_action( 'admin_print_scripts-' . $hook, array( $this, 'autoptimize_admin_scripts' ) );
@@ -959,5 +962,18 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
             return wp_doing_ajax();
         }
         return ( defined( 'DOING_AJAX' ) && DOING_AJAX );
+    }
+
+    /**
+     * Returns true menu or tab is to be shown.
+     *
+     * @return bool
+     */    
+    public static function should_show_menu_tabs() {
+        if ( ! is_multisite() || is_network_admin() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

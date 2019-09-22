@@ -437,7 +437,7 @@ class autoptimizeExtra
     public function admin_menu()
     {
         // no acces if multisite and not network admin and no site config allowed.
-        if ( ! is_multisite() || is_network_admin() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
+        if ( autoptimizeConfig::should_show_menu_tabs() ) {
             add_submenu_page(
                 null,
                 'autoptimize_extra',
@@ -452,7 +452,9 @@ class autoptimizeExtra
 
     public function add_extra_tab( $in )
     {
-        $in = array_merge( $in, array( 'autoptimize_extra' => __( 'Extra', 'autoptimize' ) ) );
+        if ( autoptimizeConfig::should_show_menu_tabs() ) {
+            $in = array_merge( $in, array( 'autoptimize_extra' => __( 'Extra', 'autoptimize' ) ) );
+        }
 
         return $in;
     }
