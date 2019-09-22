@@ -384,11 +384,12 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
     <?php _e( 'By default files saved are static css/js, uncheck this option if your webserver doesn\'t properly handle the compression and expiry.', 'autoptimize' ); ?></label></td>
     </tr>
     <?php
+    $_min_excl_class = '';
     if ( ! $conf->get( 'autoptimize_css_aggregate' ) && ! $conf->get( 'autoptimize_js_aggregate' ) ) {
-        $_min_excl_class = ' hidden';
+        $_min_excl_class = 'hidden';
     }
     ?>
-    <tr valign="top" id="min_excl_row" class="<?php echo $hidden_class . $_min_excl_class; ?>">
+    <tr valign="top" id="min_excl_row" class="<?php echo $_min_excl_class; ?>">
         <th scope="row"><?php _e( 'Minify excluded CSS and JS files?', 'autoptimize' ); ?></th>
         <td><label class="cb_label"><input type="checkbox" name="autoptimize_minify_excluded" <?php echo autoptimizeOptionWrapper::get_option( 'autoptimize_minify_excluded', '1' ) ? 'checked="checked" ' : ''; ?>/>
         <?php _e( 'When aggregating JS or CSS, excluded files that are not minified (based on filename) are by default minified by Autoptimize despite being excluded. Uncheck this option if anything breaks despite excluding.', 'autoptimize' ); ?></label></td>
