@@ -240,18 +240,17 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
 
 <?php
 // Only show enable site configuration in network site option.
-$blog_id = get_current_blog_id();
-if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && 1 === $blog_id ) {
+if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
 ?>
     <li class="itemDetail">
-    <h2 class="itemTitle"><?php _e( 'Multisite Options', 'autoptimize' ); ?></h2>
-    <table class="form-table">
-    <tr valign="top">
-    <th scope="row"><?php _e( 'Enable site configuration?', 'autoptimize' ); ?></th>
-    <td><label class="cb_label"><input type="checkbox" id="autoptimize_enable_site_config" name="autoptimize_enable_site_config" <?php echo autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ? 'checked="checked" ' : ''; ?>/>
-    <?php _e( 'Enable Autoptimize configuration per site.', 'autoptimize' ); ?></label></td>
-    </tr>
-    </table>
+        <h2 class="itemTitle"><?php _e( 'Multisite Options', 'autoptimize' ); ?></h2>
+        <table class="form-table">
+            <tr valign="top">
+                <th scope="row"><?php _e( 'Enable site configuration?', 'autoptimize' ); ?></th>
+                <td><label class="cb_label"><input type="checkbox" id="autoptimize_enable_site_config" name="autoptimize_enable_site_config" <?php echo autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ? 'checked="checked" ' : ''; ?>/>
+                <?php _e( 'Enable Autoptimize configuration per site.', 'autoptimize' ); ?></label></td>
+            </tr>
+        </table>
     </li>
 <?php } ?>
 
