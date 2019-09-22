@@ -967,7 +967,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
      * Returns true menu or tab is to be shown.
      *
      * @return bool
-     */    
+     */
     public static function should_show_menu_tabs() {
         if ( ! is_multisite() || is_network_admin() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
             return true;
