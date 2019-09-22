@@ -194,7 +194,7 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
 // Only show enable site configuration in network site option.
 if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
 ?>
-    <li class="itemDetail">
+    <li class="itemDetail multiSite">
         <h2 class="itemTitle"><?php _e( 'Multisite Options', 'autoptimize' ); ?></h2>
         <table class="form-table">
             <tr valign="top">
@@ -548,6 +548,14 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
                 jQuery("#autoptimize_css_defer_inline").hide("slow");
             }
         });
+        
+        jQuery( "#autoptimize_enable_site_config" ).change(function() {
+            if (this.checked) {
+                jQuery("li.itemDetail:not(.multiSite)").fadeTo("fast",.33);
+            } else {
+                jQuery("li.itemDetail:not(.multiSite)").fadeTo("fast",1);
+            }
+        });
 
         jQuery("#feed_dropdown").change(function() { show_feed(jQuery("#feed_dropdown").val()) });
         feedid=jQuery.cookie(cookiename);
@@ -585,6 +593,9 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
         }
         if (!jQuery("#autoptimize_js_aggregate").attr('checked')) {
             jQuery(".js_aggregate:visible").fadeTo('fast',.33);
+        }
+        if (jQuery("#autoptimize_enable_site_config").attr('checked')) {
+            jQuery("li.itemDetail:not(.multiSite)").fadeTo('fast',.33);
         }
     }
 
