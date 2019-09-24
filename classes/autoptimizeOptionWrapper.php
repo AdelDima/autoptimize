@@ -71,7 +71,7 @@ class autoptimizeOptionWrapper {
 
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && 1 === $blog_id ) {
             return update_network_option( get_main_network_id(), $option, $value );
-        } else {
+        } elseif ( $option !== 'autoptimize_enable_site_config' ) {
             return update_option( $option, $value, $autoload );
         }
     }

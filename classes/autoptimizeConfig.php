@@ -204,7 +204,9 @@ if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network
             </tr>
         </table>
     </li>
-<?php } ?>
+<?php } else { ?>
+    <input type="hidden" id="autoptimize_enable_site_config" name="autoptimize_enable_site_config" value="<?php autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ? 'on' : ''; ?>" />
+<?php } ?>    
 
 <li class="itemDetail">
 <h2 class="itemTitle"><?php _e( 'JavaScript Options', 'autoptimize' ); ?></h2>
