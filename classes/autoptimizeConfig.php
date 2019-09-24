@@ -49,6 +49,8 @@ class autoptimizeConfig
     }
 
     /**
+     * Instantiates aoconfig.
+     *
      * @return autoptimizeConfig
      */
     static public function instance()
@@ -693,6 +695,8 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
     }
 
     /**
+     * Provides the default options.
+     *
      * @return array
      */
     public static function get_defaults()
@@ -839,9 +843,9 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
         }
     }
 
-    // based on http://wordpress.stackexchange.com/a/58826 .
     static function ao_admin_tabs()
     {
+        // based on http://wordpress.stackexchange.com/a/58826 .
         $tabs        = apply_filters( 'autoptimize_filter_settingsscreen_tabs', array( 'autoptimize' => __( 'JS, CSS  &amp; HTML', 'autoptimize' ) ) );
         $tab_content = '';
         $tabs_count  = count( $tabs );

@@ -70,7 +70,7 @@ class autoptimizeOptionWrapper {
 
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
             return update_network_option( get_main_network_id(), $option, $value );
-        } elseif ( $option !== 'autoptimize_enable_site_config' ) {
+        } elseif ( 'autoptimize_enable_site_config' !== $option ) {
             return update_option( $option, $value, $autoload );
         }
     }
