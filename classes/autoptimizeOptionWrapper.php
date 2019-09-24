@@ -66,7 +66,6 @@ class autoptimizeOptionWrapper {
     public static function update_option( $option, $value, $autoload = null ) {
         // Ensure that is_plugin_active_for_network function is declared.
         self::maybe_include_plugin_functions();
-        $blog_id = get_current_blog_id();
 
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
             return update_network_option( get_main_network_id(), $option, $value );
@@ -82,7 +81,6 @@ class autoptimizeOptionWrapper {
     public function check_multisite_on_saving_options() {
         // Ensure that is_plugin_active_for_network function is declared.
         self::maybe_include_plugin_functions();
-        $blog_id = get_current_blog_id();
 
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
             add_filter( 'pre_update_option', array( $this, 'update_autoptimize_option_on_network' ), 10, 3 );
@@ -94,7 +92,6 @@ class autoptimizeOptionWrapper {
 
             // Ensure that is_plugin_active_for_network function is declared.
             self::maybe_include_plugin_functions();
-            $blog_id = get_current_blog_id();
 
             if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
                 update_network_option( get_main_network_id(), $option, $value );
