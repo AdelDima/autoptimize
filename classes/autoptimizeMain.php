@@ -65,6 +65,10 @@ class autoptimizeMain
         add_action( 'init', array( $this, 'load_textdomain' ) );
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
+        if ( is_multisite() ) {
+            add_action( 'init', 'autoptimizeOptionWrapper::check_multisite_on_saving_options' );
+        }
+
         register_activation_hook( $this->filepath, array( $this, 'on_activate' ) );
     }
 

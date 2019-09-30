@@ -15,7 +15,8 @@ class autoptimizeOptionWrapper {
      * Constructor, add filter on saving options.
      */
     public function __construct() {
-        add_action( 'init', array( $this, 'check_multisite_on_saving_options' ) );
+        // this is done in aoMain
+        // add_action( 'init', array( $this, 'check_multisite_on_saving_options' ) );
     }
 
     /**
@@ -78,26 +79,37 @@ class autoptimizeOptionWrapper {
      * Use the pre_update_option filter to check if the option to be saved if from autoptimize and
      * in that case, take care of multisite case.
      */
-    public function check_multisite_on_saving_options() {
+    public static function check_multisite_on_saving_options() {
         // Ensure that is_plugin_active_for_network function is declared.
         self::maybe_include_plugin_functions();
 
         if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
-            add_filter( 'pre_update_option', array( $this, 'update_autoptimize_option_on_network' ), 10, 3 );
+            add_filter( 'pre_update_option', 'autoptimizeOptionWrapper::update_autoptimize_option_on_network', 10, 3 );
         }
     }
 
     public static function update_autoptimize_option_on_network( $value, $option, $old_value ) {
-        if ( strpos( $option, 'autoptimize_' ) === 0 ) {
+        /* $_full_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        if ( strpos( $_full_url, network_admin_url() ) !== false ) {
+            error_log('IS network admin');
+        } else {
+            error_log('is NOT network admin (should be '.network_admin_url().' but is '.$_full_url.' )');
+        } */
 
+        if ( strpos( $option, 'autoptimize_' ) === 0 ) {
             // Ensure that is_plugin_active_for_network function is declared.
             self::maybe_include_plugin_functions();
 
             if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
+                // error_log('updating network option');
                 update_network_option( get_main_network_id(), $option, $value );
                 // Return old value, to stop update_option logic.
                 return $old_value;
+            } else {
+                // error_log('NOT updating NOT network option NOT');
             }
+        } else {
+            // error_log('not AO or not network admin: '.$option);
         }
         return $value;
     }
