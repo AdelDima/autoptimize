@@ -46,7 +46,7 @@ class autoptimizeOptionWrapper {
 
         // If the plugin is network activated and our per site setting is not on, use the network configuration.
         $configuration_per_site = get_network_option( get_main_network_id(), 'autoptimize_enable_site_config' );
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && 'on' !== $configuration_per_site ) {
+        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && ( 'on' !== $configuration_per_site || is_network_admin() ) ) {
             return get_network_option( get_main_network_id(), $option );
         }
 
@@ -83,35 +83,45 @@ class autoptimizeOptionWrapper {
         // Ensure that is_plugin_active_for_network function is declared.
         self::maybe_include_plugin_functions();
 
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
+        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
             add_filter( 'pre_update_option', 'autoptimizeOptionWrapper::update_autoptimize_option_on_network', 10, 3 );
         }
     }
 
+    /**
+     * The actual magic to differentiate between network options and per-site options.
+     */
     public static function update_autoptimize_option_on_network( $value, $option, $old_value ) {
-        /* $_full_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        if ( strpos( $_full_url, network_admin_url() ) !== false ) {
-            error_log('IS network admin');
-        } else {
-            error_log('is NOT network admin (should be '.network_admin_url().' but is '.$_full_url.' )');
-        } */
-
-        if ( strpos( $option, 'autoptimize_' ) === 0 ) {
+        if ( strpos( $option, 'autoptimize_' ) === 0 && self::is_options_from_network_admin() ) {
             // Ensure that is_plugin_active_for_network function is declared.
             self::maybe_include_plugin_functions();
 
-            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
-                // error_log('updating network option');
+            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
                 update_network_option( get_main_network_id(), $option, $value );
                 // Return old value, to stop update_option logic.
                 return $old_value;
-            } else {
-                // error_log('NOT updating NOT network option NOT');
             }
-        } else {
-            // error_log('not AO or not network admin: '.$option);
         }
         return $value;
+    }
+
+    /**
+     * As options are POST-ed to wp-admin/options.php checking is_network_admin() does not 
+     * work (yet). Instead we compare the network_admin_url with the _wp_http_referer
+     * (which should always be available as part of a hidden form field).
+     */ 
+    public static function is_options_from_network_admin() {
+        static $really_is_network_admin = null;
+
+        if ( null === $really_is_network_admin ) {
+            if ( strpos( network_admin_url('settings.php'), strtok( $_POST['_wp_http_referer'], '?' ) ) !== false ) {
+                $really_is_network_admin = true;
+            } else {
+                $really_is_network_admin = false;
+            }
+        }
+        
+        return $really_is_network_admin;
     }
 }
 new autoptimizeOptionWrapper();

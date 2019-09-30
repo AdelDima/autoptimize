@@ -65,7 +65,8 @@ class autoptimizeMain
         add_action( 'init', array( $this, 'load_textdomain' ) );
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
-        if ( is_multisite() ) {
+        if ( is_multisite() && is_admin() ) {
+            // Only if multisite and if in admin we want to check if we need to save options on network level.
             add_action( 'init', 'autoptimizeOptionWrapper::check_multisite_on_saving_options' );
         }
 
