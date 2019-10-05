@@ -517,9 +517,7 @@ class autoptimizeImages
                                 $imgopt_w = rtrim( $indiv_srcset_parts[1], 'w' );
                             }
                             if ( $this->can_optimize_image( $indiv_srcset_parts[0] ) ) {
-                                error_log($indiv_srcset_parts[0]);
                                 $imgopt_url = $this->build_imgopt_url( $indiv_srcset_parts[0], $imgopt_w, '' );
-                                error_log($imgopt_url);
                                 $tag        = str_replace( $indiv_srcset_parts[0], $imgopt_url, $tag );
                             }
                         }
