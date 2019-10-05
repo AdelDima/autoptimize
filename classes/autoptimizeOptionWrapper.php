@@ -15,8 +15,6 @@ class autoptimizeOptionWrapper {
      * Constructor, add filter on saving options.
      */
     public function __construct() {
-        // this is done in aoMain
-        // add_action( 'init', array( $this, 'check_multisite_on_saving_options' ) );
     }
 
     /**
@@ -36,9 +34,6 @@ class autoptimizeOptionWrapper {
      * @return mixed Value set for the option.
      */
     public static function get_option( $option, $default = false ) {
-        // Ensure that is_plugin_active_for_network function is declared.
-        self::maybe_include_plugin_functions();
-
         // This is always a network setting.
         if ( 'autoptimize_enable_site_config' === $option ) {
             return get_network_option( get_main_network_id(), $option );
@@ -46,7 +41,7 @@ class autoptimizeOptionWrapper {
 
         // If the plugin is network activated and our per site setting is not on, use the network configuration.
         $configuration_per_site = get_network_option( get_main_network_id(), 'autoptimize_enable_site_config' );
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && ( 'on' !== $configuration_per_site || is_network_admin() ) ) {
+        if ( self::is_ao_active_for_network() && ( 'on' !== $configuration_per_site || is_network_admin() ) ) {
             return get_network_option( get_main_network_id(), $option );
         }
 
@@ -65,10 +60,7 @@ class autoptimizeOptionWrapper {
      * @return bool False if value was not updated and true if value was updated.
      */
     public static function update_option( $option, $value, $autoload = null ) {
-        // Ensure that is_plugin_active_for_network function is declared.
-        self::maybe_include_plugin_functions();
-
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
+        if ( self::is_ao_active_for_network() && is_network_admin() ) {
             return update_network_option( get_main_network_id(), $option, $value );
         } elseif ( 'autoptimize_enable_site_config' !== $option ) {
             return update_option( $option, $value, $autoload );
@@ -80,23 +72,21 @@ class autoptimizeOptionWrapper {
      * in that case, take care of multisite case.
      */
     public static function check_multisite_on_saving_options() {
-        // Ensure that is_plugin_active_for_network function is declared.
-        self::maybe_include_plugin_functions();
-
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
+        if ( self::is_ao_active_for_network() ) {
             add_filter( 'pre_update_option', 'autoptimizeOptionWrapper::update_autoptimize_option_on_network', 10, 3 );
         }
     }
 
     /**
      * The actual magic to differentiate between network options and per-site options.
+     *
+     * @param mixed  $value     Option value.
+     * @param string $option    Option name.
+     * @param string $old_value Old value.
      */
     public static function update_autoptimize_option_on_network( $value, $option, $old_value ) {
         if ( strpos( $option, 'autoptimize_' ) === 0 && self::is_options_from_network_admin() ) {
-            // Ensure that is_plugin_active_for_network function is declared.
-            self::maybe_include_plugin_functions();
-
-            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
+            if ( self::is_ao_active_for_network() ) {
                 update_network_option( get_main_network_id(), $option, $value );
                 // Return old value, to stop update_option logic.
                 return $old_value;
@@ -106,22 +96,38 @@ class autoptimizeOptionWrapper {
     }
 
     /**
-     * As options are POST-ed to wp-admin/options.php checking is_network_admin() does not 
+     * As options are POST-ed to wp-admin/options.php checking is_network_admin() does not
      * work (yet). Instead we compare the network_admin_url with the _wp_http_referer
      * (which should always be available as part of a hidden form field).
-     */ 
+     */
     public static function is_options_from_network_admin() {
-        static $really_is_network_admin = null;
+        static $_really_is_network_admin = null;
 
         if ( null === $really_is_network_admin ) {
-            if ( strpos( network_admin_url('settings.php'), strtok( $_POST['_wp_http_referer'], '?' ) ) !== false ) {
-                $really_is_network_admin = true;
+            if ( strpos( network_admin_url( 'settings.php' ), strtok( $_POST['_wp_http_referer'], '?' ) ) !== false ) {
+                $_really_is_network_admin = true;
             } else {
-                $really_is_network_admin = false;
+                $_really_is_network_admin = false;
             }
         }
-        
-        return $really_is_network_admin;
+
+        return $_really_is_network_admin;
+    }
+
+    /**
+     * Function to check if AO (beta) is active for network.
+     */
+    public static function is_ao_active_for_network() {
+        static $_is_ao_active_for_network = null;
+        if ( null === $_is_ao_active_for_network ) {
+            self::maybe_include_plugin_functions();
+            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) || is_plugin_active_for_network( 'autoptimize-beta/autoptimize.php' ) ) {
+                $_is_ao_active_for_network = true;
+            } else {
+                $_is_ao_active_for_network = false;
+            }
+        }
+        return $_is_ao_active_for_network;
     }
 }
 new autoptimizeOptionWrapper();
