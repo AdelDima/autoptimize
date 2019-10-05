@@ -103,7 +103,7 @@ class autoptimizeOptionWrapper {
     public static function is_options_from_network_admin() {
         static $_really_is_network_admin = null;
 
-        if ( null === $really_is_network_admin ) {
+        if ( null === $_really_is_network_admin ) {
             if ( strpos( network_admin_url( 'settings.php' ), strtok( $_POST['_wp_http_referer'], '?' ) ) !== false ) {
                 $_really_is_network_admin = true;
             } else {
