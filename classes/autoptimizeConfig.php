@@ -194,7 +194,7 @@ input[type=url]:invalid {color: red; border-color:red;} .form-table th{font-weig
 
 <?php
 // Only show enable site configuration in network site option.
-if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
+if ( is_network_admin() && autoptimizeOptionWrapper::is_ao_active_for_network() ) {
 ?>
     <li class="itemDetail multiSite">
         <h2 class="itemTitle"><?php _e( 'Multisite Options', 'autoptimize' ); ?></h2>
