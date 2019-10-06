@@ -37,7 +37,7 @@ class autoptimizeConfig
     {
         if ( is_admin() ) {
             // Add the admin page and settings.
-            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) ) {
+            if ( autoptimizeOptionWrapper::is_ao_active_for_network() ) {
                 add_action( 'network_admin_menu', array( $this, 'addmenu' ) );
             }
 
@@ -637,7 +637,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
 
     public function addmenu()
     {
-        if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) && is_network_admin() ) {
+        if ( is_network_admin() && autoptimizeOptionWrapper::is_ao_active_for_network() ) {
             $hook = add_submenu_page( 'settings.php', __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_network_options', 'autoptimize', array( $this, 'show_config' ) );
         } elseif ( ! is_multisite() || 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_enable_site_config' ) ) {
             $hook = add_options_page( __( 'Autoptimize Options', 'autoptimize' ), 'Autoptimize', 'manage_options', 'autoptimize', array( $this, 'show_config' ) );
