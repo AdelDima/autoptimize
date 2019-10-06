@@ -1,13 +1,33 @@
 <?php
+/**
+ * Main configurtion logic.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 class autoptimizeConfig
 {
-    private $config          = null;
+    /**
+     * Options.
+     *
+     * @var array
+     */
+    private $config = null;
+
+    /**
+     * Singleton instance.
+     *
+     * @var self|null
+     */
     static private $instance = null;
 
+    /**
+     * Options.
+     *
+     * @var bool
+     */
     private $settings_screen_do_remote_http = true;
 
     /**
@@ -427,7 +447,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
 </div>
 <div id="autoptimize_admin_feed" class="hidden">
     <div class="autoptimize_banner hidden">
-      <ul>
+    <ul>
     <?php
     if ( $this->settings_screen_do_remote_http ) {
         $ao_banner = get_transient( 'autoptimize_banner' );
@@ -552,7 +572,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
                 jQuery("#autoptimize_css_defer_inline").hide("slow");
             }
         });
-        
+
         jQuery( "#autoptimize_enable_site_config" ).change(function() {
             if (this.checked) {
                 jQuery("li.itemDetail:not(.multiSite)").fadeTo("fast",.33);
