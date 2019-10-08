@@ -119,9 +119,9 @@ class autoptimizeOptionWrapper {
      */
     public static function is_ao_active_for_network() {
         static $_is_ao_active_for_network = null;
-        if ( null === $_is_ao_active_for_network ) {
+        if ( null === $_is_ao_active_for_network || defined( 'TEST_MULTISITE_FORCE_AO_ON_NETWORK' ) ) {
             self::maybe_include_plugin_functions();
-            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) || is_plugin_active_for_network( 'autoptimize-beta/autoptimize.php' ) || is_plugin_active_for_network( 'autoptimize-multisite-test/autoptimize.php' ) ) {
+            if ( is_plugin_active_for_network( 'autoptimize/autoptimize.php' ) || is_plugin_active_for_network( 'autoptimize-beta/autoptimize.php' ) || is_plugin_active_for_network( 'autoptimize-multisite-test/autoptimize.php' ) || defined( 'TEST_MULTISITE_FORCE_AO_ON_NETWORK' ) ) {
                 $_is_ao_active_for_network = true;
             } else {
                 $_is_ao_active_for_network = false;
