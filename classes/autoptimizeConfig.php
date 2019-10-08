@@ -724,7 +724,7 @@ if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'autoptimize-c
         static $config = array(
             'autoptimize_html'               => 0,
             'autoptimize_html_keepcomments'  => 0,
-            'autoptimize_enable_site_config' => 0,
+            'autoptimize_enable_site_config' => 1,
             'autoptimize_js'                 => 0,
             'autoptimize_js_aggregate'       => 1,
             'autoptimize_js_exclude'         => 'wp-includes/js/dist/, wp-includes/js/tinymce/, js/jquery/jquery.js',
