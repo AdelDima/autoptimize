@@ -244,3 +244,9 @@
 /* fixes for toolbar on frontend for other themes messing things up */
 #wp-admin-bar-autoptimize tr{border:0 !important}
 #wp-admin-bar-autoptimize td{background-color:#32373c !important}
+
+/*Fix autoptimize radial bar on RTL*/
+body.rtl .autoptimize-radial-bar .inset
+{
+  margin-right: 5px !important;
+}
